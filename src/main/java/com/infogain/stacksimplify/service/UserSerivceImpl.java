@@ -28,4 +28,17 @@ public class UserSerivceImpl {
 		return optionalUser;
 		
 	}
+	
+	public User updateUserById(Long id,User user) {
+	     user.setId(id);			
+		 return userRepository.save(user) ;
+		
+	}
+	
+
+	public User findByUsername(String username) {	    		
+		 return userRepository.findByUsername(username) ;
+		 
+	}
+	
 }
