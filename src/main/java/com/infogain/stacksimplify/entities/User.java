@@ -5,12 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="user")
 public class User {
 	@Column(name="EMAIL_ADDRESS",length = 50,nullable = false,unique = true)
 	private String email;
+	
+	@Size(min=2,message="First Name Should Have Atleast 2 Char Above.")
 	@Column(name="FIRST_NAME",length = 50,nullable = false)
 	private String firstname;
 	@Id
@@ -22,6 +26,8 @@ public class User {
 	private String rollno;
 	@Column(name="SSN",nullable = false,length = 50)
 	private String ssn;
+	
+	@NotEmpty(message ="User Name Is Required,Please Provide Username.")	
 	@Column(name="USER_NAME",length = 50,nullable = false,unique = true)
 	private String username;
 

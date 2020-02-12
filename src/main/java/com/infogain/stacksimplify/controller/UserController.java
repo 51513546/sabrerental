@@ -2,6 +2,9 @@ package com.infogain.stacksimplify.controller;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.infogain.stacksimplify.entities.User;
 import com.infogain.stacksimplify.exception.UserExistsException;
+import com.infogain.stacksimplify.exception.UserNameNotFoundException;
 import com.infogain.stacksimplify.exception.UserNotFoundException;
 import com.infogain.stacksimplify.service.UserSerivceImpl;
 
@@ -38,7 +42,7 @@ public class UserController {
 
 	// creatUser
 	@PostMapping("/users")
-	public ResponseEntity<Void> creatUser(@RequestBody User user,UriComponentsBuilder builder) {
+	public ResponseEntity<Void> creatUser(@Valid @RequestBody User user,UriComponentsBuilder builder) {
 		try {
 			userSerivceImpl.creatUser(user);
 			HttpHeaders headers=new HttpHeaders();
@@ -74,8 +78,15 @@ public class UserController {
 	}// updateUserById
 
 	@GetMapping("/users/byUserName/{username}")
-	public User getUserByName(@PathVariable("username") String username) {
-		return userSerivceImpl.findByUsername(username);
+	public User getUserByName(@PathVariable("username") String username,UriComponentsBuilder builder) throws UserNameNotFoundException {
+		User user= userSerivceImpl.findByUsername(username);
+		if(user==null) {
+			throw new UserNameNotFoundException(username +" Username is not exist");
+		}
+		HttpHeaders headers=new HttpHeaders();
+		headers.setLocation(builder.path("/users/{id}").buildAndExpand(user.getId()).toUri());
+		
+		return user;
 	}// getUserbyId
 
 	@DeleteMapping("/users/{id}")
