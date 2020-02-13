@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,6 +31,7 @@ import com.infogain.stacksimplify.service.UserSerivceImpl;
 //Controller
 @RestController
 @Validated
+@RequestMapping(value="/users")
 public class UserController {
 
 	// Autowired the services class
@@ -37,14 +39,14 @@ public class UserController {
 	@Autowired
 	private UserSerivceImpl userSerivceImpl;
 
-	@GetMapping("/users")
+	@GetMapping
 	public List<User> getAllUser() {
 		return userSerivceImpl.getAllUsers();
 
 	}// getAllUser
 
 	// creatUser
-	@PostMapping("/users")
+	@PostMapping
 	public ResponseEntity<Void> creatUser(@Valid @RequestBody User user,UriComponentsBuilder builder) {
 		try {
 			userSerivceImpl.creatUser(user);
@@ -58,7 +60,7 @@ public class UserController {
 	}// creatUser
 
 	// getUserbyId
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public Optional<User> getUserbyId(@Min(1) @PathVariable("id") Long id) {
 		try {
 			return userSerivceImpl.getUserById(id);
@@ -70,7 +72,7 @@ public class UserController {
 	}// getUserbyId
 
 	// updateUserById
-	@PutMapping("/users/{id}")
+	@PutMapping("/{id}")
 	public User updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
 		try {
 			return userSerivceImpl.updateUserById(id, user);
@@ -80,7 +82,7 @@ public class UserController {
 		}
 	}// updateUserById
 
-	@GetMapping("/users/byUserName/{username}")
+	@GetMapping("/byUserName/{username}")
 	public User getUserByName(@PathVariable("username") String username,UriComponentsBuilder builder) throws UserNameNotFoundException {
 		User user= userSerivceImpl.findByUsername(username);
 		if(user==null) {
@@ -92,7 +94,7 @@ public class UserController {
 		return user;
 	}// getUserbyId
 
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteUserById(@PathVariable("id") Long id) {
 		try {
 			userSerivceImpl.deleteUserById(id);

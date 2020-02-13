@@ -1,9 +1,12 @@
 package com.infogain.stacksimplify.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -34,6 +37,18 @@ public class User {
 	public User() {
 	
 		// TODO Auto-generated constructor stub
+	}
+	
+	@OneToMany(mappedBy ="user")
+	private List<Order> listOfOrder;
+	
+
+	public List<Order> getListOfOrder() {
+		return listOfOrder;
+	}
+
+	public void setListOfOrder(List<Order> listOfOrder) {
+		this.listOfOrder = listOfOrder;
 	}
 
 	public User(Long id, String username, String firstname, String lastname, String email, String rollno, String ssn) {
