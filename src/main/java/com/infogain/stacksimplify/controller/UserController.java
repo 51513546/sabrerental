@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ import com.infogain.stacksimplify.service.UserSerivceImpl;
 
 //Controller
 @RestController
+@Validated
 public class UserController {
 
 	// Autowired the services class
@@ -56,7 +59,7 @@ public class UserController {
 
 	// getUserbyId
 	@GetMapping("/users/{id}")
-	public Optional<User> getUserbyId(@PathVariable("id") Long id) {
+	public Optional<User> getUserbyId(@Min(1) @PathVariable("id") Long id) {
 		try {
 			return userSerivceImpl.getUserById(id);
 		} catch (UserNotFoundException une) {

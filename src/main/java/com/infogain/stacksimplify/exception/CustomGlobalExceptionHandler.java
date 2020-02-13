@@ -1,13 +1,12 @@
 package com.infogain.stacksimplify.exception;
 
 import java.util.Date;
-import java.util.Set;
+
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -44,6 +43,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 	public final ResponseEntity<Object> handleUserNameNotFoundException(UserNameNotFoundException e,WebRequest request){
 		CustomErrorDetails ERRORDETAILS=new CustomErrorDetails(new Date(),e.getLocalizedMessage(),request.getDescription(false));
 		return new ResponseEntity<>(ERRORDETAILS,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e,WebRequest request){
+		CustomErrorDetails ERRORDETAILS=new CustomErrorDetails(new Date(),e.getLocalizedMessage(),request.getDescription(false));
+		return new ResponseEntity<>(ERRORDETAILS,HttpStatus.BAD_REQUEST);
 	}
 
 }
